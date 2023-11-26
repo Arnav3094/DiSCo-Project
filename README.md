@@ -13,3 +13,6 @@ This problem is unique due to the flexibility it offers regarding the number of 
 ## Our Initial Approach
 
 - in Adjacency Matrix, we will not use 1 to denote the edge, we will rather use weights. Where higher weight denotes higher preference of a prof for that course
+- weight of 1 is highest preference
+- we could use a simple greedy algorithm to assign the best edges
+
