@@ -8,24 +8,24 @@ const int NUM_COURSES = 6;
 void printGraph(vector<vector<int>>& graph){
     cout << "   Courses\n";
     cout << "   ";
-    for(int i = 1; i <= NUM_COURSES; i++){
+    for(int i = 1; i < graph[0].size(); i++){
         cout << i << " ";
     }
     cout << endl << "   ";
-    for(int i = 1; i <= NUM_COURSES; i++){
+    for(int i = 1; i < graph[0].size(); i++){
         cout << "_ ";
     }
     cout << endl;
-    for(int i = 1; i <= NUM_FACULTIES; i++){
+    for(int i = 1; i < graph.size(); i++){
         cout << i << "| ";
-        for(int j = 1; j <= NUM_COURSES; j++){
+        for(int j = 1; j < graph[0].size(); j++){
             cout << graph[i][j] << " ";
         }
         cout << endl;
     }
 }
 
-
+// preference 1 is the highest preference
 void addEdge(vector<vector<int>>& graph, int facultyCode, int courseCode, int weight){
     graph[facultyCode][courseCode] = weight;
 }
