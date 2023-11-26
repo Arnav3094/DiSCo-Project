@@ -1,8 +1,11 @@
 #include <bits/stdc++.h>
+#include "Professor.cpp"
+#include "Course.cpp"
 using namespace std;
 
 const int NUM_FACULTIES = 5;
 const int NUM_COURSES = 6;
+
 
 // TESTER FUNCTIONS
 void printGraph(vector<vector<int>>& graph){
