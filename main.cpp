@@ -21,7 +21,7 @@ void printGraph(vector<vector<int>>& graph){
         for(int j = 1; j < graph[0].size(); j++){
             cout << graph[i][j] << " ";
         }
-        cout << endl;
+        cout << endl ;
     }
 }
 
