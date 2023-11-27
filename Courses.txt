@@ -1,0 +1,30 @@
+Object Oriented Programming,213,FDCDC
+Data Structures & Algorithms,211,FDCDC
+Logic in Computer Science,214,FDCDC
+Digital Design,215,FDCDC
+Discrete Structures for Computer Science,222,FDCDC
+Microprocessors & Interfacing,241,FDCDC
+Principles of Programming Languages,301,FDCDC
+Computer Architecture,342,FDCDC
+Theory of Computation,351,FDCDC
+Compiler Construction,363,FDCDC
+Design & Analysis of Algorithms,364,FDCDC
+Operating Systems,372,FDCDC
+Image Processing,311,FDEL
+Neural Networks and Fuzzy Logic,312,FDEL
+Fuzzy Logic and Applications,343,FDEL
+Human - Computer Interaction,364,FDEL
+Quantum Information and Computation,386,FDEL
+Blockchain Technology,452,FDEL
+Network Security,513,HDCDC
+Advanced Computer Architecture,524,HDCDC
+Advanced Computer Networks,525,HDCDC
+Advanced Algorithms and Complexity,526,HDCDC
+Advanced Operating Systems,623,HDCDC
+Advanced Database Systems,516,HDEL
+Internet of Things: Design and Development,518,HDEL
+Social Media Analytics,519,HDEL
+Advanced Data Mining,520,HDEL
+Software for Embedded Systems,523,HDEL
+Cloud Computing,527,HDEL
+
