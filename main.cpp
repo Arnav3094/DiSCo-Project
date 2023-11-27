@@ -4,8 +4,8 @@
 #include <fstream>
 using namespace std;
 
-const int NUM_FACULTIES = 5;
-const int NUM_COURSES = 6;
+const int NUM_FACULTIES = 30;
+const int NUM_COURSES = 29;
 
 
 // TESTER FUNCTIONS
@@ -57,11 +57,26 @@ void populateUnallottedCourses(vector<Course*>& courses, string inputFile){
     courseInput.open("Courses.txt", ios::in);
     if(!courseInput.is_open()) throw runtime_error("File could not be opened correctly.");
     string line;
-    while(getline(courseInput, line)){
-
-        vector<string> a = breakString(line);
-        Course* c = new Course(a[0], stoi(a[1]), stoi(a[2]));
-        courses.push_back(c);
+    int i = 1;
+    while(i <= NUM_COURSES){ // Ideally change this to while(getline(courseInput, line))
+        getline(courseInput, line);
+        // cout << i <<" here1\n";
+        vector<string> strings = breakString(line);
+        // cout << i <<" here2\n";
+        int type;
+        if(strings[2] == "FDCDC") type = 1;
+        else if (strings[2] == "FDEL") type = 2;
+        else if(strings[2] == "HDCDC") type = 3;
+        else if (strings[2] == "HDEL") type = 4;
+        else throw invalid_argument("Invalid course type: " + strings[2]);
+        // cout << i <<" here3\n";
+        try{
+            Course* c = new Course(strings[0], stoi(strings[1]), type);
+            courses.push_back(c);
+        } catch (invalid_argument e){
+            cout << "Invalid argument: " << e.what() << " + " << strings[0] << " + " << strings[1] << " + " << strings[2] << endl;
+        }
+        i++;
     }
 }
 
@@ -84,11 +99,7 @@ int main(){
     // addEdge(graph, 4, 1, 1); // prof 0 wants course 0 with preference 1
     // addEdge(graph, 5, 2, 1); // prof 0 wants course 0 with preference 1
 
-
-
-
-
-    printGraph(graph);
+    // printGraph(graph);
 
     
 }
