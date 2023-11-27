@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
-#include "Professor.cpp"
-#include "Course.cpp"
+#include "Professor.h"
+#include "Course.h"
 using namespace std;
 
 const int NUM_FACULTIES = 5;

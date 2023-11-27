@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include "Professor.h"
 using namespace std;
 
 class Course{

@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-#include "Course.cpp"
+#include "Course.h"
 using namespace std;
 
 class Professor{
