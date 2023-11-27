@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 #include "Professor.h"
 #include "Course.h"
+#include <fstream>
 using namespace std;
 
 const int NUM_FACULTIES = 5;
@@ -28,16 +29,50 @@ void printGraph(vector<vector<int>>& graph){
     }
 }
 
+void printVector(vector<Course> s){
+    for(Course a : s) cout << a.getName() << " " << a.getCourseCode()<< " " << " " << a.getType()<< "\n";
+    cout << endl;
+}
+
+void printVector(vector<Course*> s){
+    for(Course* a : s) cout << a->getName() << " " << a->getCourseCode()<< " " << " " << a->getType()<< "\n";
+    cout << endl;
+}
+
 // preference 1 is the highest preference
 void addEdge(vector<vector<int>>& graph, int facultyCode, int courseCode, int weight){
     graph[facultyCode][courseCode] = weight;
 }
 
+vector<string> breakString(string s){
+    vector<string> substrings;
+    stringstream ss(s);
+    string substring;
+    while(getline(ss, substring, ',')) substrings.push_back(substring);
+    return substrings;
+}
+
+void populateUnallottedCourses(vector<Course*>& courses, string inputFile){
+    fstream courseInput;
+    courseInput.open("Courses.txt", ios::in);
+    if(!courseInput.is_open()) throw runtime_error("File could not be opened correctly.");
+    string line;
+    while(getline(courseInput, line)){
+
+        vector<string> a = breakString(line);
+        Course* c = new Course(a[0], stoi(a[1]), stoi(a[2]));
+        courses.push_back(c);
+    }
+}
+
 int main(){
     vector<vector<int>> graph(NUM_FACULTIES + 1, vector<int>(NUM_COURSES + 1, 0));
 
-    vector<Professor&> unallottedProfessors;
-    vector<Course&> unallottedCourses;
+    vector<Professor*> unallottedProfessors;
+    vector<Course*> unallottedCourses;
+
+    populateUnallottedCourses(unallottedCourses, "Courses.txt");
+    printVector(unallottedCourses);
 
     // BUILD GRAPH HERE
     // addEdge(graph, 1, 1, 1); // prof 1 wants course 1 with preference 1
