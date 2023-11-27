@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include "Course.cpp"
 using namespace std;
 
 class Professor{
@@ -38,6 +39,7 @@ class Professor{
         }
         void addCourse(Course& course){
             courses.push_back(course);
+            course.addProfessor(*this);
         }
         vector<Course&>& getCourse(){
             return courses;
