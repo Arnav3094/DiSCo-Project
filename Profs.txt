@@ -27,4 +27,4 @@ Sujith Thomas,26,3
 Surjya Ghosh,27,3
 Swati Agarwal,28,3
 Tanmay Tulsidas Verlekart,29,3
-Vinayak Naik,20,3
+Vinayak Naik,30,3
