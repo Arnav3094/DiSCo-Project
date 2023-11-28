@@ -1,10 +1,10 @@
 #include <bits/stdc++.h>
-#include "Professor.h"
-#include "Course.h"
 #include <fstream>
+#include "Course.h"
+#include "Professor.h"
 using namespace std;
 
-const int NUM_FACULTIES = 30;
+const int NUM_PROFESSORS = 30;
 const int NUM_COURSES = 29;
 
 
@@ -52,90 +52,116 @@ vector<string> breakString(string s){
     return substrings;
 }
 
-Course* getCourseByCode(int code){
-    Course* c;
-    
-    return c;
+int getCourseType(string type){
+    int typeInt;
+    if(type == "FDCDC") typeInt = 1;
+    else if (type == "FDEL") typeInt = 2;
+    else if(type == "HDCDC") typeInt = 3;
+    else if (type == "HDEL") typeInt = 4;
+    else throw invalid_argument("Invalid course type: " + type);
+    return typeInt;
 }
 
-void populateUnallottedCourses(vector<Course*>& courses, string inputFile){
+void populateCourses(unordered_map<int, Course*>& courses, vector<int> courseCodes, string inputFile){
     fstream courseInput;
     courseInput.open(inputFile, ios::in);
     if(!courseInput.is_open()) throw runtime_error("File could not be opened correctly.");
-    string line;
+    string coursesLine;
+
     int i = 1;
     while(i <= NUM_COURSES){ // Ideally change this to while(getline(courseInput, line))
-        getline(courseInput, line);
-        // cout << i <<" here1\n";
-        vector<string> strings = breakString(line);
-        // cout << i <<" here2\n";
-        int type;
-        if(strings[2] == "FDCDC") type = 1;
-        else if (strings[2] == "FDEL") type = 2;
-        else if(strings[2] == "HDCDC") type = 3;
-        else if (strings[2] == "HDEL") type = 4;
-        else throw invalid_argument("Invalid course type: " + strings[2]);
-        // cout << i <<" here3\n";
-        try{
-            Course* c = new Course(strings[0], stoi(strings[1]), type);
-            courses.push_back(c);
-        } catch (invalid_argument e){
-            cout << "Invalid argument: " << e.what() << " + " << strings[0] << " + " << strings[1] << " + " << strings[2] << endl;
-        }
+        getline(courseInput, coursesLine);
+        vector<string> coursesStrings = breakString(coursesLine);
+        int code;
+        try {code = stoi(coursesStrings[1]);}
+        catch (invalid_argument e) {throw invalid_argument("[populateCourses] Invalid Course Code: "+ coursesStrings[1] +". Make sure Course Code is numeric.");}
+        int type = getCourseType(coursesStrings[2]);
+        Course* c = new Course(coursesStrings[0], code, type);
+        courses.insert({code, c});
         i++;
     }
 }
 
-void populateUnallottedProfs(vector<Professor*>& professors, string inputFile1/*Profs.txt*/, string inputFile2/*Prof_plist.txt*/){
-    fstream profInput;
-    profInput.open(inputFile1, ios::in);
-    if(!profInput.is_open()) throw runtime_error(inputFile1 + " could not be opened correctly.");
+void populateProfs(unordered_map<int,Professor*>& professors, vector<int>& professorCodes, unordered_map<int, Course*>courses, string inputFile1/*Profs.txt*/, string inputFile2/*Prof_plist.txt*/){
+    fstream profsInput;
+    profsInput.open(inputFile1, ios::in);
+    if(!profsInput.is_open()) throw runtime_error(inputFile1 + " could not be opened correctly.");
     string profsLine;
 
     fstream plistInput;
     plistInput.open(inputFile2, ios::in);
-    if(!profInput.is_open()) throw runtime_error(inputFile2 + " could not be opened correctly.");
+    if(!profsInput.is_open()) throw runtime_error(inputFile2 + " could not be opened correctly.");
     string plistLine;
 
-    int i=1;
-    while(i <= NUM_FACULTIES){
-        getline(profInput, profsLine);
-        vector<string> profsSubstrings = breakString(profsLine);
-        Professor* p;
+    int i = 1;
+    while(i <= NUM_PROFESSORS){
+        getline(profsInput, profsLine);
+        vector<string> profStrings = breakString(profsLine);
         getline(plistInput,plistLine);
-        vector<string> plistSubstrings = breakString(plistLine);
-        vector<Course*> profsPlist;
-        int j=1;
-        while(j <= plistSubstrings.size() - 1){
-            Course* c;
-            try {
-                c = getCourseByCode(stoi(plistSubstrings[j]));
-                // add some code if course could not be found
-            } catch (invalid_argument e){
-                throw invalid_argument("Invalid Course Code. Make sure Course Code is numeric");
-            }
-            profsPlist.push_back(c);
-        }
+        vector<string> plistStrings = breakString(plistLine);
+        int profsCode, profsCategory;
         try{
-            p = new Professor(profsSubstrings[0], stoi(profsSubstrings[1]), stoi(profsSubstrings[2]), profsPlist);
-            professors.push_back(p);
-        } catch (invalid_argument e){
-            throw invalid_argument("Invalid Argument: "+profsSubstrings[0]+" "+profsSubstrings[1]+" "+profsSubstrings[2]);
-            cout << "Invalid argument: " << e.what() << " + " << profsSubstrings[0] << " + " << profsSubstrings[1] << " + " << profsSubstrings[2] << endl;
+            profsCode = stoi(profStrings[1]);
+            profsCategory = stoi(profStrings[2]);
+        } catch(invalid_argument e){
+            throw invalid_argument("Invalid Argument: " + profStrings[1] + " " + profStrings[2]);
         }
-        //Course* c = getCourseByCode(plistLine[2]);
+        professorCodes.push_back(profsCode);
+        // Making vector of Profs plist
+        vector<Course*> profsPlist;
+        int j = 1;
+        while(j <= plistStrings.size() - 1){
+            int courseCode;
+            try{
+                // cout << "i: " + to_string(i) + " j: " + to_string(j) + " " + plistStrings[j] << endl;
+                courseCode = stoi(plistStrings[j]);
+            } catch (invalid_argument e){
+                throw invalid_argument("[populateProfs] Invalid Course Code: " + plistStrings[j]);
+            }
+            Course* c = courses[courseCode];
+            profsPlist.push_back(c);
+            j++;
+        }
+        Professor* p = new Professor(profStrings[0], profsCode, profsCategory, profsPlist);
+        professors.insert({profsCode, p});
+        i++;
     }
+}
 
+void printCourses(const unordered_map<int, Course*>& map) {
+    for (const auto& pair : map) {
+        Course c = *pair.second;
+        cout << pair.first << ": " << c.getName() << ", " << c.getType() << endl;
+    }
+}
+void printProfessors(const unordered_map<int, Professor*>& map) {
+    for (const auto& pair : map) {
+        Professor p = *pair.second;
+        cout << pair.first << ": " << p.getName() << ", " << p.getCategory() << endl;
+    }
 }
 
 int main(){
-    vector<vector<int>> graph(NUM_FACULTIES + 1, vector<int>(NUM_COURSES + 1, 0));
+    vector<vector<int>> graph(NUM_PROFESSORS + 1, vector<int>(NUM_COURSES + 1, 0));
 
-    vector<Professor*> unallottedProfessors;
-    vector<Course*> unallottedCourses;
+    // vector<Professor*> unallottedProfessors;
+    // vector<Course*> unallottedCourses;
 
-    populateUnallottedCourses(unallottedCourses, "Courses.txt");
-    printVector(unallottedCourses);
+    // populateUnallottedCourses(unallottedCourses, "Courses.txt");
+    // printVector(unallottedCourses);
+
+    // Primarily for keeping track of the Course/Prof Codes that exist in our input files
+    vector<int> courseCodes;
+    vector<int> ProfCodes;
+
+    // To quickly get the Course/Prof object from the Course/Prof Code
+    unordered_map<int, Course*> courses;
+    unordered_map<int, Professor*> professors;
+
+    populateCourses(courses, courseCodes, "Courses.txt");
+    printCourses(courses);
+    populateProfs(professors, ProfCodes, courses, "Profs.txt", "Prof_plist.txt");
+    printProfessors(professors);
 
     // BUILD GRAPH HERE
     // addEdge(graph, 1, 1, 1); // prof 1 wants course 1 with preference 1
