@@ -8,7 +8,7 @@ const int NUM_PROFESSORS = 30;
 const int NUM_COURSES = 29;
 
 // Graph
-vector<vector<int>> graph(NUM_PROFESSORS + 1, vector<int>(NUM_COURSES + 1, 0));
+vector<vector<int>> graph(NUM_PROFESSORS * 3, vector<int>(NUM_COURSES * 2, 0));
 
 // Primarily for keeping track of the Course/Prof Codes that exist in our input files
 vector<int> courseCodes;
@@ -157,6 +157,27 @@ void printProfessors() {
     }
 }
 
+void buildGraph(vector<vector<int>>& graph, map<int, Professor*> professors, map<int, Course*> courses, const int NUM_PROFESSORS, const int NUM_COURSES){
+    for(int i = 0; i < NUM_PROFESSORS * 3; i += 3){
+        Professor* p = professors[profCodes[i]];
+        vector<Course*> plist = p->getCourses();
+        int category = p->getCategory();
+
+        // Creating vector for the one row of the ith professor
+        vector<int> row(NUM_COURSES * 2, 0);
+        for(int j = 0; j < plist.size(); j++){
+            Course* c = plist[j];
+            int k = (c->getCourseCode() - 1)*2;
+            row[k] = 1;
+            row[k + 1] = 1;
+        }
+        // Row vector created
+
+        for(int j = 0; j < p->getCategory(); j++){
+            graph[i + j] = row;
+        }
+    }
+}
 
 int main(){
 
@@ -166,4 +187,6 @@ int main(){
     populateProfs(professors, profCodes, courses, "Profs.txt", "Prof_plist.txt");
     // sort(profCodes.begin(), profCodes.end()); // Sorting the profCodes vector so that we can iterate through it in order
     printProfessors();
+
+    buildGraph(graph, professors, courses, NUM_PROFESSORS, NUM_COURSES);
 }
