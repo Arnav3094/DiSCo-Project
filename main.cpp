@@ -1,10 +1,11 @@
 #include <bits/stdc++.h>
-#include "Professor.cpp"
-#include "Course.cpp"
+#include <fstream>
+#include "Course.h"
+#include "Professor.h"
 using namespace std;
 
-const int NUM_FACULTIES = 5;
-const int NUM_COURSES = 6;
+const int NUM_PROFESSORS = 30;
+const int NUM_COURSES = 29;
 
 
 // TESTER FUNCTIONS
@@ -28,16 +29,139 @@ void printGraph(vector<vector<int>>& graph){
     }
 }
 
+void printVector(vector<Course> s){
+    for(Course a : s) cout << a.getName() << " " << a.getCourseCode()<< " " << " " << a.getType()<< "\n";
+    cout << endl;
+}
+
+void printVector(vector<Course*> s){
+    for(Course* a : s) cout << a->getName() << " " << a->getCourseCode()<< " " << " " << a->getType()<< "\n";
+    cout << endl;
+}
+
 // preference 1 is the highest preference
 void addEdge(vector<vector<int>>& graph, int facultyCode, int courseCode, int weight){
     graph[facultyCode][courseCode] = weight;
 }
 
-int main(){
-    vector<vector<int>> graph(NUM_FACULTIES + 1, vector<int>(NUM_COURSES + 1, 0));
+vector<string> breakString(string s){
+    vector<string> substrings;
+    stringstream ss(s);
+    string substring;
+    while(getline(ss, substring, ',')) substrings.push_back(substring);
+    return substrings;
+}
 
-    vector<Professor&> unallottedProfessors;
-    vector<Course&> unallottedCourses;
+int getCourseType(string type){
+    int typeInt;
+    if(type == "FDCDC") typeInt = 1;
+    else if (type == "FDEL") typeInt = 2;
+    else if(type == "HDCDC") typeInt = 3;
+    else if (type == "HDEL") typeInt = 4;
+    else throw invalid_argument("Invalid course type: " + type);
+    return typeInt;
+}
+
+void populateCourses(unordered_map<int, Course*>& courses, vector<int> courseCodes, string inputFile){
+    fstream courseInput;
+    courseInput.open(inputFile, ios::in);
+    if(!courseInput.is_open()) throw runtime_error("File could not be opened correctly.");
+    string coursesLine;
+
+    int i = 1;
+    while(i <= NUM_COURSES){ // Ideally change this to while(getline(courseInput, line))
+        getline(courseInput, coursesLine);
+        vector<string> coursesStrings = breakString(coursesLine);
+        int code;
+        try {code = stoi(coursesStrings[1]);}
+        catch (invalid_argument e) {throw invalid_argument("[populateCourses] Invalid Course Code: "+ coursesStrings[1] +". Make sure Course Code is numeric.");}
+        int type = getCourseType(coursesStrings[2]);
+        Course* c = new Course(coursesStrings[0], code, type);
+        courses.insert({code, c});
+        i++;
+    }
+}
+
+void populateProfs(unordered_map<int,Professor*>& professors, vector<int>& professorCodes, unordered_map<int, Course*>courses, string inputFile1/*Profs.txt*/, string inputFile2/*Prof_plist.txt*/){
+    fstream profsInput;
+    profsInput.open(inputFile1, ios::in);
+    if(!profsInput.is_open()) throw runtime_error(inputFile1 + " could not be opened correctly.");
+    string profsLine;
+
+    fstream plistInput;
+    plistInput.open(inputFile2, ios::in);
+    if(!profsInput.is_open()) throw runtime_error(inputFile2 + " could not be opened correctly.");
+    string plistLine;
+
+    int i = 1;
+    while(i <= NUM_PROFESSORS){
+        getline(profsInput, profsLine);
+        vector<string> profStrings = breakString(profsLine);
+        getline(plistInput,plistLine);
+        vector<string> plistStrings = breakString(plistLine);
+        int profsCode, profsCategory;
+        try{
+            profsCode = stoi(profStrings[1]);
+            profsCategory = stoi(profStrings[2]);
+        } catch(invalid_argument e){
+            throw invalid_argument("Invalid Argument: " + profStrings[1] + " " + profStrings[2]);
+        }
+        professorCodes.push_back(profsCode);
+        // Making vector of Profs plist
+        vector<Course*> profsPlist;
+        int j = 1;
+        while(j <= plistStrings.size() - 1){
+            int courseCode;
+            try{
+                // cout << "i: " + to_string(i) + " j: " + to_string(j) + " " + plistStrings[j] << endl;
+                courseCode = stoi(plistStrings[j]);
+            } catch (invalid_argument e){
+                throw invalid_argument("[populateProfs] Invalid Course Code: " + plistStrings[j]);
+            }
+            Course* c = courses[courseCode];
+            profsPlist.push_back(c);
+            j++;
+        }
+        Professor* p = new Professor(profStrings[0], profsCode, profsCategory, profsPlist);
+        professors.insert({profsCode, p});
+        i++;
+    }
+}
+
+void printCourses(const unordered_map<int, Course*>& map) {
+    for (const auto& pair : map) {
+        Course c = *pair.second;
+        cout << pair.first << ": " << c.getName() << ", " << c.getType() << endl;
+    }
+}
+void printProfessors(const unordered_map<int, Professor*>& map) {
+    for (const auto& pair : map) {
+        Professor p = *pair.second;
+        cout << pair.first << ": " << p.getName() << ", " << p.getCategory() << endl;
+    }
+}
+
+int main(){
+    vector<vector<int>> graph(NUM_PROFESSORS + 1, vector<int>(NUM_COURSES + 1, 0));
+
+    // vector<Professor*> unallottedProfessors;
+    // vector<Course*> unallottedCourses;
+
+    // populateUnallottedCourses(unallottedCourses, "Courses.txt");
+    // printVector(unallottedCourses);
+
+    // Primarily for keeping track of the Course/Prof Codes that exist in our input files
+    vector<int> courseCodes;
+    vector<int> ProfCodes;
+
+    // To quickly get the Course/Prof object from the Course/Prof Code
+    unordered_map<int, Course*> courses;
+    unordered_map<int, Professor*> professors;
+
+    populateCourses(courses, courseCodes, "Courses.txt");
+    printCourses(courses);
+    populateProfs(professors, ProfCodes, courses, "Profs.txt", "Prof_plist.txt");
+    printProfessors(professors);
 
     // BUILD GRAPH HERE
     // addEdge(graph, 1, 1, 1); // prof 1 wants course 1 with preference 1
@@ -49,11 +173,7 @@ int main(){
     // addEdge(graph, 4, 1, 1); // prof 0 wants course 0 with preference 1
     // addEdge(graph, 5, 2, 1); // prof 0 wants course 0 with preference 1
 
-
-
-
-
-    printGraph(graph);
+    // printGraph(graph);
 
     
 }
