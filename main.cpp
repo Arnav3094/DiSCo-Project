@@ -39,6 +39,8 @@ map<int, Professor*> professors;
 //     }
 // }
 
+
+
 void printVector(vector<Course> s){
     for(Course a : s) cout << a.getName() << " " << a.getCourseCode()<< " " << " " << a.getType()<< "\n";
     cout << endl;
@@ -159,7 +161,8 @@ void printProfessors() {
 
 void buildGraph(vector<vector<int>>& graph, map<int, Professor*> professors, map<int, Course*> courses, const int NUM_PROFESSORS, const int NUM_COURSES){
     for(int i = 0; i < NUM_PROFESSORS * 3; i += 3){
-        Professor* p = professors[profCodes[i]];
+        // cout << "i: " << i << endl;
+        Professor* p = professors[profCodes[i/3]];
         vector<Course*> plist = p->getCourses();
         int category = p->getCategory();
 
@@ -179,6 +182,21 @@ void buildGraph(vector<vector<int>>& graph, map<int, Professor*> professors, map
     }
 }
 
+void printGraph(const vector<vector<int>>& graph, int NUM_PROFESSORS, int NUM_COURSES) {
+    cout << "  ";
+    for(int i = 0; i < NUM_COURSES * 2; i++){
+        printf("%3d", i + 1);
+    }
+    cout << endl;
+    for(int i = 0; i < NUM_PROFESSORS * 3; i ++){
+        printf("%2d| ", i);
+        for(int j = 0; j < NUM_COURSES * 2; j++){
+            cout << graph[i][j] << "  ";
+        }
+        cout << endl;
+    }
+}
+
 int main(){
 
     populateCourses(courses, courseCodes, "Courses.txt");
@@ -189,4 +207,5 @@ int main(){
     printProfessors();
 
     buildGraph(graph, professors, courses, NUM_PROFESSORS, NUM_COURSES);
+    printGraph(graph, NUM_PROFESSORS, NUM_COURSES);
 }
