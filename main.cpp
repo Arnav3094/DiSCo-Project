@@ -7,6 +7,9 @@ using namespace std;
 const int NUM_PROFESSORS = 30;
 const int NUM_COURSES = 29;
 
+// Graph
+vector<vector<int>> graph(NUM_PROFESSORS + 1, vector<int>(NUM_COURSES + 1, 0));
+
 // Primarily for keeping track of the Course/Prof Codes that exist in our input files
 vector<int> courseCodes;
 vector<int> profCodes;
@@ -46,8 +49,14 @@ void printVector(vector<Course*> s){
     cout << endl;
 }
 
-void addEdge(vector<vector<int>>& graph, int facultyCode, int courseCode, int weight){
-    graph[facultyCode][courseCode] = weight;
+void printVector(vector<Professor*> s){
+    for(Professor* a : s) cout << a->getName() << " " << a->getProfCode()<< " " << " " << a->getCategory()<< "\n";
+    cout << endl;
+}
+
+void printVector(vector<Professor> s){
+    for(Professor a : s) cout << a.getName() << " " << a.getProfCode()<< " " << " " << a.getCategory()<< "\n";
+    cout << endl;
 }
 
 vector<string> breakString(string s){
@@ -134,15 +143,15 @@ void populateProfs(map<int,Professor*>& professors, vector<int>& professorCodes,
     }
 }
 
-void printCourses(const map<int, Course*>& map) {
-    for (const auto& pair : map) {
+void printCourses() {
+    for (const auto& pair : courses) {
         Course c = *pair.second;
         cout << pair.first << ": " << c.getName() << ", " << c.getType() << endl;
     }
 }
 
-void printProfessors(const map<int, Professor*>& map) {
-    for (const auto& pair : map) {
+void printProfessors() {
+    for (const auto& pair : professors) {
         Professor p = *pair.second;
         cout << pair.first << ": " << p.getName() << ", " << p.getCategory() << endl;
     }
@@ -150,13 +159,11 @@ void printProfessors(const map<int, Professor*>& map) {
 
 
 int main(){
-    vector<vector<int>> graph(NUM_PROFESSORS + 1, vector<int>(NUM_COURSES + 1, 0));
 
     populateCourses(courses, courseCodes, "Courses.txt");
     // sort(courseCodes.begin(), courseCodes.end()); // Sorting the courseCodes vector so that we can iterate through it in order
-    printCourses(courses);
+    printCourses();
     populateProfs(professors, profCodes, courses, "Profs.txt", "Prof_plist.txt");
     // sort(profCodes.begin(), profCodes.end()); // Sorting the profCodes vector so that we can iterate through it in order
-    printProfessors(professors);
-    
+    printProfessors();
 }
