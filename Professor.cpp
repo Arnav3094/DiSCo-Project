@@ -3,22 +3,22 @@
 #include "Course.h"
 using namespace std;
 
-Professor::Professor(string name, int facultyCode, int category, vector<Course*> courses){
+Professor::Professor(string name, int profCode, int category, vector<Course*> courses){
     this->name = name;
-    this->facultyCode = facultyCode;
+    this->profCode = profCode;
     this->category = category;
     this->courses = courses;
 }
-Professor::Professor(string name, int facultyCode, int category){
+Professor::Professor(string name, int profCode, int category){
     this->name = name;
-    this->facultyCode = facultyCode;
+    this->profCode = profCode;
     this->category = category;
 }
 string Professor::getName(){
     return name;
 }
-int Professor::getFacultyCode(){
-    return facultyCode;
+int Professor::getProfCode(){
+    return profCode;
 }
 int Professor::getCategory(){
     return category;
@@ -34,7 +34,7 @@ void Professor::addCourse(Course course){
     courses.push_back(&course);
     course.addProfessor(*this);
 }
-vector<Course*> Professor::getCourse(){
+vector<Course*> Professor::getCourses(){
     return courses;
 }
 void Professor::setAllotted(vector<Course*> allotted){
