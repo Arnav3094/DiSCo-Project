@@ -7,27 +7,34 @@ using namespace std;
 const int NUM_PROFESSORS = 30;
 const int NUM_COURSES = 29;
 
+// Primarily for keeping track of the Course/Prof Codes that exist in our input files
+vector<int> courseCodes;
+vector<int> profCodes;
+
+// To quickly get the Course/Prof object from the Course/Prof Code
+map<int, Course*> courses;
+map<int, Professor*> professors;
 
 // TESTER FUNCTIONS
-void printGraph(vector<vector<int>>& graph){
-    cout << "   Courses\n";
-    cout << "   ";
-    for(int i = 1; i < graph[0].size(); i++){
-        cout << i << " ";
-    }
-    cout << endl << "   ";
-    for(int i = 1; i < graph[0].size(); i++){
-        cout << "_ ";
-    }
-    cout << endl;
-    for(int i = 1; i < graph.size(); i++){
-        cout << i << "| ";
-        for(int j = 1; j < graph[0].size(); j++){
-            cout << graph[i][j] << " ";
-        }
-        cout << endl;
-    }
-}
+// void printGraph(vector<vector<int>>& graph){
+//     cout << "   Courses\n";
+//     cout << "   ";
+//     for(int i = 1; i < graph[0].size(); i++){
+//         cout << i << " ";
+//     }
+//     cout << endl << "   ";
+//     for(int i = 1; i < graph[0].size(); i++){
+//         cout << "_ ";
+//     }
+//     cout << endl;
+//     for(int i = 1; i < graph.size(); i++){
+//         cout << i << "| ";
+//         for(int j = 1; j < graph[0].size(); j++){
+//             cout << graph[i][j] << " ";
+//         }
+//         cout << endl;
+//     }
+// }
 
 void printVector(vector<Course> s){
     for(Course a : s) cout << a.getName() << " " << a.getCourseCode()<< " " << " " << a.getType()<< "\n";
@@ -39,7 +46,6 @@ void printVector(vector<Course*> s){
     cout << endl;
 }
 
-// preference 1 is the highest preference
 void addEdge(vector<vector<int>>& graph, int facultyCode, int courseCode, int weight){
     graph[facultyCode][courseCode] = weight;
 }
@@ -62,7 +68,7 @@ int getCourseType(string type){
     return typeInt;
 }
 
-void populateCourses(unordered_map<int, Course*>& courses, vector<int> courseCodes, string inputFile){
+void populateCourses(map<int, Course*>& courses, vector<int> courseCodes, string inputFile){
     fstream courseInput;
     courseInput.open(inputFile, ios::in);
     if(!courseInput.is_open()) throw runtime_error("File could not be opened correctly.");
@@ -82,7 +88,7 @@ void populateCourses(unordered_map<int, Course*>& courses, vector<int> courseCod
     }
 }
 
-void populateProfs(unordered_map<int,Professor*>& professors, vector<int>& professorCodes, unordered_map<int, Course*>courses, string inputFile1/*Profs.txt*/, string inputFile2/*Prof_plist.txt*/){
+void populateProfs(map<int,Professor*>& professors, vector<int>& professorCodes, map<int, Course*>courses, string inputFile1/*Profs.txt*/, string inputFile2/*Prof_plist.txt*/){
     fstream profsInput;
     profsInput.open(inputFile1, ios::in);
     if(!profsInput.is_open()) throw runtime_error(inputFile1 + " could not be opened correctly.");
@@ -128,52 +134,36 @@ void populateProfs(unordered_map<int,Professor*>& professors, vector<int>& profe
     }
 }
 
-void printCourses(const unordered_map<int, Course*>& map) {
+void printCourses(const map<int, Course*>& map) {
     for (const auto& pair : map) {
         Course c = *pair.second;
         cout << pair.first << ": " << c.getName() << ", " << c.getType() << endl;
     }
 }
-void printProfessors(const unordered_map<int, Professor*>& map) {
+
+void printProfessors(const map<int, Professor*>& map) {
     for (const auto& pair : map) {
         Professor p = *pair.second;
         cout << pair.first << ": " << p.getName() << ", " << p.getCategory() << endl;
     }
 }
 
+void buildGraph(vector<vector<int>>& graph, map<int, Professor*> professors, map<int, Course*> courses, const int NUM_PROFESSORS){
+    for(int i =0; i < NUM_PROFESSORS; i++){
+        Professor* p = professors[profCodes[i]];
+        vector<Course*> plist = p->getCourses();
+        
+    }
+}
+
 int main(){
     vector<vector<int>> graph(NUM_PROFESSORS + 1, vector<int>(NUM_COURSES + 1, 0));
 
-    // vector<Professor*> unallottedProfessors;
-    // vector<Course*> unallottedCourses;
-
-    // populateUnallottedCourses(unallottedCourses, "Courses.txt");
-    // printVector(unallottedCourses);
-
-    // Primarily for keeping track of the Course/Prof Codes that exist in our input files
-    vector<int> courseCodes;
-    vector<int> ProfCodes;
-
-    // To quickly get the Course/Prof object from the Course/Prof Code
-    unordered_map<int, Course*> courses;
-    unordered_map<int, Professor*> professors;
-
     populateCourses(courses, courseCodes, "Courses.txt");
+    // sort(courseCodes.begin(), courseCodes.end()); // Sorting the courseCodes vector so that we can iterate through it in order
     printCourses(courses);
-    populateProfs(professors, ProfCodes, courses, "Profs.txt", "Prof_plist.txt");
+    populateProfs(professors, profCodes, courses, "Profs.txt", "Prof_plist.txt");
+    // sort(profCodes.begin(), profCodes.end()); // Sorting the profCodes vector so that we can iterate through it in order
     printProfessors(professors);
-
-    // BUILD GRAPH HERE
-    // addEdge(graph, 1, 1, 1); // prof 1 wants course 1 with preference 1
-    // addEdge(graph, 1, 5, 2); // prof 1 wants course 5 with preference 2
-    // addEdge(graph, 1, 4, 3); // prof 1 wants course 4 with preference 3
-    // addEdge(graph, 1, 2, 4); // prof 1 wants course 2 with preference 4
-    // addEdge(graph, 2, 1, 1); // prof 2 wants course 1 with preference 1
-    // addEdge(graph, 3, 4, 1); // prof 3 wants course 4 with preference 1
-    // addEdge(graph, 4, 1, 1); // prof 0 wants course 0 with preference 1
-    // addEdge(graph, 5, 2, 1); // prof 0 wants course 0 with preference 1
-
-    // printGraph(graph);
-
     
 }
