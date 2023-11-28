@@ -34,7 +34,7 @@ void Professor::addCourse(Course course){
     courses.push_back(&course);
     course.addProfessor(*this);
 }
-vector<Course*> Professor::getCourse(){
+vector<Course*> Professor::getCourses(){
     return courses;
 }
 void Professor::setAllotted(vector<Course*> allotted){

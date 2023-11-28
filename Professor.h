@@ -20,7 +20,7 @@ public:
     void setCourses(vector<Course*> courses);
     void addCourse(Course* course);
     void addCourse(Course course);
-    vector<Course*> getCourse();
+    vector<Course*> getCourses();
     void setAllotted(vector<Course*> allotted);
     void allotCourse(Course* course);
     void allotCourse(Course course);
