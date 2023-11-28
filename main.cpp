@@ -148,13 +148,6 @@ void printProfessors(const map<int, Professor*>& map) {
     }
 }
 
-void buildGraph(vector<vector<int>>& graph, map<int, Professor*> professors, map<int, Course*> courses, const int NUM_PROFESSORS){
-    for(int i =0; i < NUM_PROFESSORS; i++){
-        Professor* p = professors[profCodes[i]];
-        vector<Course*> plist = p->getCourses();
-        
-    }
-}
 
 int main(){
     vector<vector<int>> graph(NUM_PROFESSORS + 1, vector<int>(NUM_COURSES + 1, 0));
