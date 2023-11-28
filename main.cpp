@@ -52,9 +52,15 @@ vector<string> breakString(string s){
     return substrings;
 }
 
+Course* getCourseByCode(int code){
+    Course* c;
+    
+    return c;
+}
+
 void populateUnallottedCourses(vector<Course*>& courses, string inputFile){
     fstream courseInput;
-    courseInput.open("Courses.txt", ios::in);
+    courseInput.open(inputFile, ios::in);
     if(!courseInput.is_open()) throw runtime_error("File could not be opened correctly.");
     string line;
     int i = 1;
@@ -78,6 +84,48 @@ void populateUnallottedCourses(vector<Course*>& courses, string inputFile){
         }
         i++;
     }
+}
+
+void populateUnallottedProfs(vector<Professor*>& professors, string inputFile1/*Profs.txt*/, string inputFile2/*Prof_plist.txt*/){
+    fstream profInput;
+    profInput.open(inputFile1, ios::in);
+    if(!profInput.is_open()) throw runtime_error(inputFile1 + " could not be opened correctly.");
+    string profsLine;
+
+    fstream plistInput;
+    plistInput.open(inputFile2, ios::in);
+    if(!profInput.is_open()) throw runtime_error(inputFile2 + " could not be opened correctly.");
+    string plistLine;
+
+    int i=1;
+    while(i <= NUM_FACULTIES){
+        getline(profInput, profsLine);
+        vector<string> profsSubstrings = breakString(profsLine);
+        Professor* p;
+        getline(plistInput,plistLine);
+        vector<string> plistSubstrings = breakString(plistLine);
+        vector<Course*> profsPlist;
+        int j=1;
+        while(j <= plistSubstrings.size() - 1){
+            Course* c;
+            try {
+                c = getCourseByCode(stoi(plistSubstrings[j]));
+                // add some code if course could not be found
+            } catch (invalid_argument e){
+                throw invalid_argument("Invalid Course Code. Make sure Course Code is numeric");
+            }
+            profsPlist.push_back(c);
+        }
+        try{
+            p = new Professor(profsSubstrings[0], stoi(profsSubstrings[1]), stoi(profsSubstrings[2]), profsPlist);
+            professors.push_back(p);
+        } catch (invalid_argument e){
+            throw invalid_argument("Invalid Argument: "+profsSubstrings[0]+" "+profsSubstrings[1]+" "+profsSubstrings[2]);
+            cout << "Invalid argument: " << e.what() << " + " << profsSubstrings[0] << " + " << profsSubstrings[1] << " + " << profsSubstrings[2] << endl;
+        }
+        //Course* c = getCourseByCode(plistLine[2]);
+    }
+
 }
 
 int main(){
