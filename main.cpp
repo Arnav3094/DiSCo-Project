@@ -1,14 +1,12 @@
 #include <bits/stdc++.h>
 #include <fstream>
-#include "Course.h"
-#include "Professor.h"
+#include "graph.h"
 using namespace std;
 
 const int NUM_PROFESSORS = 30;
 const int NUM_COURSES = 29;
 
-// Graph
-vector<vector<int>> graph(NUM_PROFESSORS * 3, vector<int>(NUM_COURSES * 2, 0));
+const int n = NUM_PROFESSORS * 3 + NUM_COURSES * 2 + 2; // Total number of nodes, including sink and source
 
 // Primarily for keeping track of the Course/Prof Codes that exist in our input files
 vector<int> courseCodes;
@@ -17,6 +15,9 @@ vector<int> profCodes;
 // To quickly get the Course/Prof object from the Course/Prof Code
 map<int, Course*> courses;
 map<int, Professor*> professors;
+
+// Graph
+Graph* graph = new Graph(n, NUM_PROFESSORS, NUM_COURSES);
 
 // TESTER FUNCTIONS
 // void printGraph(vector<vector<int>>& graph){
@@ -159,53 +160,57 @@ void printProfessors() {
     }
 }
 
-void buildGraph(vector<vector<int>>& graph, map<int, Professor*> professors, map<int, Course*> courses, const int NUM_PROFESSORS, const int NUM_COURSES){
-    for(int i = 0; i < NUM_PROFESSORS * 3; i += 3){
-        // cout << "i: " << i << endl;
-        Professor* p = professors[profCodes[i/3]];
-        vector<Course*> plist = p->getCourses();
-        int category = p->getCategory();
+// void buildGraph(vector<vector<int>>& graph, map<int, Professor*> professors, map<int, Course*> courses, const int NUM_PROFESSORS, const int NUM_COURSES){
+//     for(int i = 0; i < NUM_PROFESSORS * 3; i += 3){
+//         // cout << "i: " << i << endl;
+//         Professor* p = professors[profCodes[i/3]];
+//         vector<Course*> plist = p->getCourses();
+//         int category = p->getCategory();
 
-        // Creating vector for the one row of the ith professor
-        vector<int> row(NUM_COURSES * 2, 0);
-        for(int j = 0; j < plist.size(); j++){
-            Course* c = plist[j];
-            int k = (c->getCourseCode() - 1)*2;
-            row[k] = 1;
-            row[k + 1] = 1;
-        }
-        // Row vector created
+//         // Creating vector for the one row of the ith professor
+//         vector<int> row(NUM_COURSES * 2, 0);
+//         for(int j = 0; j < plist.size(); j++){
+//             Course* c = plist[j];
+//             int k = (c->getCourseCode() - 1)*2;
+//             row[k] = 1;
+//             row[k + 1] = 1;
+//         }
+//         // Row vector created
 
-        for(int j = 0; j < p->getCategory(); j++){
-            graph[i + j] = row;
-        }
-    }
-}
+//         for(int j = 0; j < p->getCategory(); j++){
+//             graph[i + j] = row;
+//         }
+//     }
+// }
 
-void printGraph(const vector<vector<int>>& graph, int NUM_PROFESSORS, int NUM_COURSES) {
-    cout << "  ";
-    for(int i = 0; i < NUM_COURSES * 2; i++){
-        printf("%3d", i + 1);
-    }
-    cout << endl;
-    for(int i = 0; i < NUM_PROFESSORS * 3; i ++){
-        printf("%2d| ", i);
-        for(int j = 0; j < NUM_COURSES * 2; j++){
-            cout << graph[i][j] << "  ";
-        }
-        cout << endl;
-    }
-}
+// void printGraph(const vector<vector<int>>& graph, int NUM_PROFESSORS, int NUM_COURSES) {
+//     cout << "  ";
+//     for(int i = 0; i < NUM_COURSES * 2; i++){
+//         printf("%3d", i + 1);
+//     }
+//     cout << endl;
+//     for(int i = 0; i < NUM_PROFESSORS * 3; i ++){
+//         printf("%2d| ", i);
+//         for(int j = 0; j < NUM_COURSES * 2; j++){
+//             cout << graph[i][j] << "  ";
+//         }
+//         cout << endl;
+//     }
+// }
+
 
 int main(){
 
     populateCourses(courses, courseCodes, "Courses.txt");
-    // sort(courseCodes.begin(), courseCodes.end()); // Sorting the courseCodes vector so that we can iterate through it in order
+    sort(courseCodes.begin(), courseCodes.end()); // Sorting the courseCodes vector so that we can iterate through it in order
     printCourses();
     populateProfs(professors, profCodes, courses, "Profs.txt", "Prof_plist.txt");
-    // sort(profCodes.begin(), profCodes.end()); // Sorting the profCodes vector so that we can iterate through it in order
+    sort(profCodes.begin(), profCodes.end()); // Sorting the profCodes vector so that we can iterate through it in order
     printProfessors();
 
-    buildGraph(graph, professors, courses, NUM_PROFESSORS, NUM_COURSES);
-    printGraph(graph, NUM_PROFESSORS, NUM_COURSES);
+    graph->build(professors, profCodes);
+    graph->print();
+
+    // buildGraph(graph, professors, courses, NUM_PROFESSORS, NUM_COURSES);
+    // printGraph(graph, NUM_PROFESSORS, NUM_COURSES);
 }
