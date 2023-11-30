@@ -58,7 +58,7 @@ void Graph::print(string file_name){
         fprintf(out, "%3d", graph[this->t][i]);
         // cout << graph[this->t][i] << "  ";
     }
-
+    fclose(out);
 }
 
 void Graph::build( map<int, Professor*> professors,vector<int> profCodes){
