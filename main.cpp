@@ -18,6 +18,7 @@ map<int, Professor*> professors;
 
 // Graph
 Graph* graph = new Graph(n, NUM_PROFESSORS, NUM_COURSES);
+Graph* newGraph = new Graph(n, NUM_PROFESSORS, NUM_COURSES);
 
 // TESTER FUNCTIONS
 // void printGraph(vector<vector<int>>& graph){
@@ -160,45 +161,30 @@ void printProfessors() {
     }
 }
 
-// bool bfs(Graph* graphObj, vector<int>& parent){
-//     vector<vector<int>> graph = graphObj->getGraph(); 
-//     int s = graphObj->getS();
-//     int n = graphObj->getN();
-//     parent = vector<int>(n, 0);
-//     vector<bool> visited(n, 0);
-//     queue<int> q;
-//     q.push(s);
-//     visited[s] = true;
-//     parent[s] = -1;
-    
-//     //bfs loop
-//     while(!q.empty()) {
-//         int u = q.front();
-//         q.pop();
 
 //         for(int v=0; v<n; v++){
 //             if(visited[v] == false && graph.get[u][v] > 0){
 //                 if(v==graph->getT()){
-//                     parent[v] = u;
+//                     path[v] = u;
 //                     return true; 
 //                 }
 //                 q.push(v);
-//                 parent[v] = u;
+//                 path[v] = u;
 //                 visited[v] = true;
 //             }
 //         }
 //     }
 // }
 
-bool bfs(vector<vector<int>>& graph, int s, int t,vector<int>& parent){
+bool bfs(vector<vector<int>>& graph, int s, int t,vector<int>& path){
     int n = graph.size();
-    parent = vector<int>(n, 0);
+    path = vector<int>(n, 0);
     vector<bool> visited(n, 0);
     
     queue<int> q;
     q.push(s);
     visited[s] = true;
-    parent[s] = -1;
+    path[s] = -1;
     
     //bfs loop
     while(!q.empty()) {
@@ -208,16 +194,50 @@ bool bfs(vector<vector<int>>& graph, int s, int t,vector<int>& parent){
         for(int v=0; v<n; v++){
             if(visited[v] == false && graph[u][v] > 0){
                 if(v==t){
-                    parent[v] = u;
+                    path[v] = u;
                     return true; 
                 }
                 q.push(v);
-                parent[v] = u;
+                path[v] = u;
                 visited[v] = true;
             }
         }
     }
     return false;
+}
+
+Graph* fordFulkerson(vector<vector<int>>& graph, int s, int t){
+    int y/*u*/,x/*v*/ ;
+    int n = graph.size();
+    vector<vector<int>> rGraph(graph.size(),vector<int>(graph.size(),0)) ;
+    Graph* newGraphObj = new Graph(n, NUM_PROFESSORS, NUM_COURSES);
+    vector<vector<int>> newGraph(n, vector<int>(n, 0));
+    for(y=0; y<n; y++)
+        for(x=0; x<n; x++)
+            rGraph[y][x] = graph[y][x];
+    // cout << "here1\n";
+    vector<int> path(n,0);
+    while(bfs(rGraph, s, t, path)){
+        //finding the bottle-neck for the given path
+        int bottle_neck = INT_MAX ;
+        for(x = t; x!=s; x = path[x]){
+            y = path[x];
+            bottle_neck = min(bottle_neck, rGraph[y][x]);
+        }
+        // cout << "here2\n";
+
+        for( x=t; x!=s; x=path[x]){
+            y = path[x];
+            rGraph[y][x] -= bottle_neck;
+            rGraph[x][y] += bottle_neck;
+            newGraph[y][x] += bottle_neck;
+            // newGraph[x][y] -= bottle_neck;
+            // cout <<"y:" + to_string(y) + " x:" + to_string(x) + " bottle_neck: "+ to_string(bottle_neck) +" here3\n";
+        }
+
+    }
+    newGraphObj->setGraph(newGraph);
+    return newGraphObj;
 }
 
 // void buildGraph(vector<vector<int>>& graph, map<int, Professor*> professors, map<int, Course*> courses, const int NUM_PROFESSORS, const int NUM_COURSES){
@@ -269,20 +289,20 @@ int main(){
     printProfessors();
 
     graph->build(professors, profCodes);
-    graph->print();
+    graph->print("original_graph.txt");
 
     // buildGraph(graph, professors, courses, NUM_PROFESSORS, NUM_COURSES);
     // printGraph(graph, NUM_PROFESSORS, NUM_COURSES);
     vector<vector<int>> rGraph = graph->getGraphCopy();
     // path 
-    vector<int> parent;
-    bfs(graph->getGraph(),graph->getS(),graph->getT(), parent);
-
+    // vector<int> path;
+    // bfs(graph->getGraph(),graph->getS(),graph->getT(), path);
     // To test bfs
-//     for(int i = 0; i < parent.size(); i++){
-//         cout << i <<":"<< parent[i] << " ";
+//     for(int i = 0; i < path.size(); i++){
+//         cout << i <<":"<< path[i] << " ";
 //     }
 //     cout << endl;
 
-
+    Graph* newGraph = fordFulkerson(graph->getGraph(), graph->getS(), graph->getT());
+    newGraph->print("output.txt");
 }

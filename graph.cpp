@@ -11,8 +11,8 @@ Graph::Graph(int n, int numProfessors, int numCourses){
     this->graph = vector<vector<int>>(n, vector<int>(n, 0));
 }
 
-void Graph::print(){
-    FILE* out = fopen("output.txt", "w");
+void Graph::print(string file_name){
+    FILE* out = fopen(file_name.c_str(), "w");
     if(out == NULL){
         throw runtime_error("Could not open file");
         cout << "Error opening file" << endl;
@@ -117,4 +117,8 @@ int Graph::getT(){
 
 vector<vector<int>> Graph::getGraphCopy(){
     return this->graph;
+}
+
+void Graph::setGraph(vector<vector<int>> graph){
+    this->graph = graph;
 }
