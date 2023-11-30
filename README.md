@@ -1,3 +1,5 @@
+### Compile Command: g++ main.cpp graph.cpp Professor.cpp Course.cpp -o main
+
 # Question Statement: An Application of Graph Optimization-Course Project
 
 The research problem at hand revolves around the optimization of the University Course Assignment System. Within a department, there are "n" faculty members categorised into three distinct groups: "x1," "x2," and "x3." Faculty in each category are assigned different course loads, with "x1" handling 0.5 courses per semester, "x2" taking 1 course per semester, and "x3" managing 1.5 courses per semester.
@@ -29,8 +31,13 @@ This problem is unique due to the flexibility it offers regarding the number of 
 7. **graph.cpp**: defines methods of the Graph class
 8. **Profs.txt**: The input file that stores all data of the professors
 9. **Courses.txt**: The input file that stores all data of the courses
-10. **Profs_plist.txt**: The input file that storesthe preference lists of all professors matched with the professor's code
-10. **Profs_plist2.txt**: The input file that storesthe preference lists of all professors matched with the professor's code
+10. **Profs_plist1.txt**: An input file that stores the preference lists of all professors matched with the professor's code
+11. **Profs_plist2.txt**: Another plist file
+12. **Profs_plist3.txt**: This plist file forces multiple courses to be left unassigned
+13. **original_graph.txt**: The original graph gets printed here
+14. **output.txt**: The graph with the correct assignments gets orinted here
+
+## Note: To change the plist in use for the program, change line no. 293 in main.cpp to 'populateProfs(professors, profCodes, courses, "Profs.txt", "<plist_filename>");'
 
 ## Input Format
 
