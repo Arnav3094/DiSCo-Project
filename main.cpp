@@ -236,7 +236,7 @@ void printAssignment(string outputFile, Graph* graphObj, map<int, Professor*> pr
     int index1, index2;
     vector<vector<int>> graph = graphObj->getGraphCopy();
     for(int i = 3 * NUM_PROFESSORS + 1; i < 2 * NUM_COURSES + 3 * NUM_PROFESSORS + 1; i+= 2){
-        cout << "i: " << i << endl;
+        // cout << "i: " << i << endl;
         index1 = findInColumn(graph, 1, i);
         index2 = findInColumn(graph, 1, i + 1);
         int courseCode = graphObj->getCourseCode(i);
@@ -289,25 +289,15 @@ int main(){
 
     populateCourses(courses, courseCodes, "Courses.txt");
     sort(courseCodes.begin(), courseCodes.end()); // Sorting the courseCodes vector so that we can iterate through it in order
-    printCourses();
-    populateProfs(professors, profCodes, courses, "Profs.txt", "Prof_plist.txt");
+    // printCourses();
+    populateProfs(professors, profCodes, courses, "Profs.txt", "Prof_plist1.txt");
     sort(profCodes.begin(), profCodes.end()); // Sorting the profCodes vector so that we can iterate through it in order
-    printProfessors();
+    // printProfessors();
 
     graph->build(professors, profCodes);
     graph->print("original_graph.txt");
 
     vector<vector<int>> rGraph = graph->getGraphCopy();
-
-    // To test BFS
-    // path 
-
-    // vector<int> path;
-    // bfsWithCheckpoint(graph->getGraph(),graph->getS(),graph->getT(), 4, path);
-    // for(int i = 0; i < path.size(); i++){
-    //     cout << i <<":"<< path[i] << " ";
-    // }
-    // cout << endl;
 
     Graph* newGraph = fordFulkerson(graph->getGraph(), graph->getS(), graph->getT());
     newGraph->print("output.txt");
