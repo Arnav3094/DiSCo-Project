@@ -20,29 +20,6 @@ map<int, Professor*> professors;
 Graph* graph = new Graph(n, NUM_PROFESSORS, NUM_COURSES);
 Graph* newGraph = new Graph(n, NUM_PROFESSORS, NUM_COURSES);
 
-// TESTER FUNCTIONS
-// void printGraph(vector<vector<int>>& graph){
-//     cout << "   Courses\n";
-//     cout << "   ";
-//     for(int i = 1; i < graph[0].size(); i++){
-//         cout << i << " ";
-//     }
-//     cout << endl << "   ";
-//     for(int i = 1; i < graph[0].size(); i++){
-//         cout << "_ ";
-//     }
-//     cout << endl;
-//     for(int i = 1; i < graph.size(); i++){
-//         cout << i << "| ";
-//         for(int j = 1; j < graph[0].size(); j++){
-//             cout << graph[i][j] << " ";
-//         }
-//         cout << endl;
-//     }
-// }
-
-
-
 void printVector(vector<Course> s){
     for(Course a : s) cout << a.getName() << " " << a.getCourseCode()<< " " << " " << a.getType()<< "\n";
     cout << endl;
