@@ -8,7 +8,7 @@ class Graph{
     int numProfessors;
     int numCourses;
     vector<vector<int>> graph;
-    int s; // Source node, will be set to n - 2
+    int s; // Source node, will be set to 0
     int t; // Sink node, will be set to n - 1
 public:
     Graph(int n, int numProfessors, int numCourses);
