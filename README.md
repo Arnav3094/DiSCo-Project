@@ -32,8 +32,12 @@ This problem is unique due to the flexibility it offers regarding the number of 
 8. **Profs.txt**: The input file that stores all data of the professors
 9. **Courses.txt**: The input file that stores all data of the courses
 10. **Profs_plist1.txt**: An input file that stores the preference lists of all professors matched with the professor's code
-11. **Profs_plist2.txt**: An input file that stores the preference lists of all professors matched with the professor's code
-12. **Profs_plist3.txt**: An input file that stores the preference lists of all professors matched with the professor's code
+11. **Profs_plist2.txt**: Another plist file
+12. **Profs_plist3.txt**: This plist file forces multiple courses to be left unassigned
+13. **original_graph.txt**: The original graph gets printed here
+14. **output.txt**: The graph with the correct assignments gets orinted here
+
+## Note: To change the plist in use for the program, change line no. 293 in main.cpp to 'populateProfs(professors, profCodes, courses, "Profs.txt", "<plist_filename>");'
 
 ## Input Format
 
