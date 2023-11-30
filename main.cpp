@@ -161,21 +161,6 @@ void printProfessors() {
     }
 }
 
-
-//         for(int v=0; v<n; v++){
-//             if(visited[v] == false && graph.get[u][v] > 0){
-//                 if(v==graph->getT()){
-//                     path[v] = u;
-//                     return true; 
-//                 }
-//                 q.push(v);
-//                 path[v] = u;
-//                 visited[v] = true;
-//             }
-//         }
-//     }
-// }
-
 bool bfs(vector<vector<int>>& graph, int s, int t,vector<int>& path){
     int n = graph.size();
     path = vector<int>(n, 0);
@@ -290,14 +275,13 @@ int main(){
 
     graph->build(professors, profCodes);
     graph->print("original_graph.txt");
-
-    // buildGraph(graph, professors, courses, NUM_PROFESSORS, NUM_COURSES);
-    // printGraph(graph, NUM_PROFESSORS, NUM_COURSES);
+    
     vector<vector<int>> rGraph = graph->getGraphCopy();
+
+    // To test BFS
     // path 
     // vector<int> path;
     // bfs(graph->getGraph(),graph->getS(),graph->getT(), path);
-    // To test bfs
 //     for(int i = 0; i < path.size(); i++){
 //         cout << i <<":"<< path[i] << " ";
 //     }
