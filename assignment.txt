@@ -1,0 +1,29 @@
+Course: Object Oriented Programming, Course Code: 1, Course Type: FDCDC, Professors: Ramprasad S. Joshi (1), Basabdatta Bhattacharya (5)
+Course: Data Structures & Algorithms, Course Code: 2, Course Type: FDCDC, Professors: Biju K. Raveendran Nair (7), Devashish Gosain (8)
+Course: Logic in Computer Science, Course Code: 3, Course Type: FDCDC, Professor: Hemant Rathore, Professor Code: 11
+Course: Digital Design, Course Code: 4, Course Type: FDCDC, Professors: Diptendu Chatterjee (9), Gargi Sanket Prabhu (10)
+Course: Discrete Structures for Computer Science, Course Code: 5, Course Type: FDCDC, Professors: Ashwin Srinivasan (2), Aditya Challa (4)
+Course: Microprocessors & Interfacing, Course Code: 6, Course Type: FDCDC, Professor: Santonu Sarkar, Professor Code: 17
+Course: Principles of Programming Languages, Course Code: 7, Course Type: FDCDC, Professor: Kanchan Manna, Professor Code: 12
+Course: Computer Architecture, Course Code: 8, Course Type: FDCDC, Professor: Sougata Sen, Professor Code: 20
+Course: Theory of Computation, Course Code: 9, Course Type: FDCDC, Professors: Harikrishnan N.B. (3), Bharat Madhusudan Deshpande (6)
+Course: Compiler Construction, Course Code: 10, Course Type: FDCDC, Professor: Rajesh Kumar, Professor Code: 15
+Course: Design & Analysis of Algorithms, Course Code: 11, Course Type: FDCDC, Professor: Kunal Kishore Korgaonkar, Professor Code: 13
+Course: Operating Systems, Course Code: 12, Course Type: FDCDC, Professor: Neena Goveas, Professor Code: 14
+Course: Image Processing, Course Code: 13, Course Type: FDEL, Professor: Sanjay K. Sahay, Professor Code: 16
+Course: Neural Networks and Fuzzy Logic, Course Code: 14, Course Type: FDEL, Professor: Sravan Danda, Professor Code: 21
+Course: Fuzzy Logic and Applications, Course Code: 15, Course Type: FDEL, Professor: Shubhangi Krushnachandra Gawali, Professor Code: 18
+Course: Human - Computer Interaction, Course Code: 16, Course Type: FDEL, Professor: Arnab Kumar Paul, Professor Code: 22
+Course: Quantum Information and Computation, Course Code: 17, Course Type: FDEL, Professors: Sravan Danda (21), A. Baskar (24)
+Course: Blockchain Technology, Course Code: 18, Course Type: FDEL, Professor: Siddharth Gupta, Professor Code: 19
+Course: Network Security, Course Code: 19, Course Type: HDCDC, Professor: Snehanshu Sahu, Professor Code: 23
+Course: Advanced Computer Architecture, Course Code: 20, Course Type: HDCDC, Professors: Snehanshu Sahu (23), A. Baskar (24)
+Course: Advanced Computer Networks, Course Code: 21, Course Type: HDCDC, Professors: Arnab Kumar Paul (22), A. Baskar (24)
+Course: Advanced Algorithms and Complexity, Course Code: 22, Course Type: HDCDC, Professor: Swaroop Joshi, Professor Code: 25
+Course: Advanced Operating Systems, Course Code: 23, Course Type: HDCDC, Professor: Sujith Thomas, Professor Code: 26
+Course: Advanced Database Systems, Course Code: 24, Course Type: HDEL, Professors: Swaroop Joshi (25), Surjya Ghosh (27)
+Course: Internet of Things: Design and Development, Course Code: 25, Course Type: HDEL, Professor: Vinayak Naik, Professor Code: 30
+Course: Social Media Analytics, Course Code: 26, Course Type: HDEL, Professors: Sujith Thomas (26), Swati Agarwal (28)
+Course: Advanced Data Mining, Course Code: 27, Course Type: HDEL, Professor: Swati Agarwal, Professor Code: 28
+Course: Software for Embedded Systems, Course Code: 28, Course Type: HDEL, Professor: Tanmay Tulsidas Verlekart, Professor Code: 29
+Course: Cloud Computing, Course Code: 29, Course Type: HDEL, Professor: Surjya Ghosh, Professor Code: 27

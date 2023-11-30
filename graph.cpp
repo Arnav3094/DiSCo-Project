@@ -122,3 +122,20 @@ vector<vector<int>> Graph::getGraphCopy(){
 void Graph::setGraph(vector<vector<int>> graph){
     this->graph = graph;
 }
+
+int Graph::getCourseCode(int index){
+    return ((index - 3 * numProfessors)+1)/2;
+}
+
+int Graph::getProfCode(int index){
+    return (index - 1)/3 + 1;
+}
+
+int findInColumn(const vector<vector<int>>& matrix, int element, int column) {
+    for (int i = 0; i < matrix.size(); ++i) {
+        if (matrix[i][column] == element) {
+            return i;
+        }
+    }
+    return -1; // Element not found
+}

@@ -192,7 +192,7 @@ bool bfs(vector<vector<int>>& graph, int s, int t,vector<int>& path){
 }
 
 Graph* fordFulkerson(vector<vector<int>>& graph, int s, int t){
-    int y/*u*/,x/*v*/ ;
+    int y,x ;
     int n = graph.size();
     vector<vector<int>> rGraph(graph.size(),vector<int>(graph.size(),0)) ;
     Graph* newGraphObj = new Graph(n, NUM_PROFESSORS, NUM_COURSES);
@@ -210,12 +210,11 @@ Graph* fordFulkerson(vector<vector<int>>& graph, int s, int t){
             bottle_neck = min(bottle_neck, rGraph[y][x]);
         }
         // cout << "here2\n";
-
         for( x=t; x!=s; x=path[x]){
             y = path[x];
             rGraph[y][x] -= bottle_neck;
             rGraph[x][y] += bottle_neck;
-            newGraph[y][x] += bottle_neck;
+            newGraph[y][x] += bottle_neck; // building the new graph
             // newGraph[x][y] -= bottle_neck;
             // cout <<"y:" + to_string(y) + " x:" + to_string(x) + " bottle_neck: "+ to_string(bottle_neck) +" here3\n";
         }
@@ -225,44 +224,66 @@ Graph* fordFulkerson(vector<vector<int>>& graph, int s, int t){
     return newGraphObj;
 }
 
-// void buildGraph(vector<vector<int>>& graph, map<int, Professor*> professors, map<int, Course*> courses, const int NUM_PROFESSORS, const int NUM_COURSES){
-//     for(int i = 0; i < NUM_PROFESSORS * 3; i += 3){
-//         // cout << "i: " << i << endl;
-//         Professor* p = professors[profCodes[i/3]];
-//         vector<Course*> plist = p->getCourses();
-//         int category = p->getCategory();
 
-//         // Creating vector for the one row of the ith professor
-//         vector<int> row(NUM_COURSES * 2, 0);
-//         for(int j = 0; j < plist.size(); j++){
-//             Course* c = plist[j];
-//             int k = (c->getCourseCode() - 1)*2;
-//             row[k] = 1;
-//             row[k + 1] = 1;
-//         }
-//         // Row vector created
+void printAssignment(string outputFile, Graph* graphObj, map<int, Professor*> professors, map<int, Course*> courses){
+    FILE* out;
+    out = fopen(outputFile.c_str(), "w"); // Assign the file pointer to 'out'
+    if(out == NULL){
+        throw runtime_error("Could not open file");
+        cout << "Error opening file" << endl;
+        return;
+    }
+    int index1, index2;
+    vector<vector<int>> graph = graphObj->getGraphCopy();
+    for(int i = 3 * NUM_PROFESSORS + 1; i < 2 * NUM_COURSES + 3 * NUM_PROFESSORS + 1; i+= 2){
+        cout << "i: " << i << endl;
+        index1 = findInColumn(graph, 1, i);
+        index2 = findInColumn(graph, 1, i + 1);
+        int courseCode = graphObj->getCourseCode(i);
+        string courseName = courses[courseCode]->getName();
+        string courseType;
+        switch (courses[courseCode]->getType()){
+        case 1:
+            courseType = "FDCDC";
+            break;
+        case 2:
+            courseType = "FDEL";
+            break;
+        case 3:
+            courseType = "HDCDC";
+            break;
+        case 4:
+            courseType = "HDEL";
+            break;
+        default:
+            throw runtime_error("Something went wrong. You got an invalid course type.");
+            break;
+        }
+        if(index1 == -1 && index2 == -1){
+            fprintf(out, "[COULD NOT BE ASSIGNED] Course: %s, Course Code: %d, Course Type: %s,\n", courseName.c_str(), courseCode, courseType.c_str());
+            continue;
+        }
+        else if(index1 == -1 || index2 == -1){
+            int profCode = (index1 == -1) ? graphObj->getProfCode(index2) : graphObj->getProfCode(index1);
+            string profName = professors[profCode]->getName();
+            fprintf(out, "[COURSE ALLOTTED PARTIALLY] Course: %s, Course Code: %d, Course Type: %s, Professor Code: %d, Professor: %s\n", courseName.c_str(), courseCode, courseType.c_str(), profCode, profName.c_str());
+            continue;
+        } else{
+            int profCode1 = graphObj->getProfCode(index1);
+            int profCode2 = graphObj->getProfCode(index2);
+            if(profCode1 == profCode2){
+                string profName = professors[profCode1]->getName();
+                fprintf(out, "Course: %s, Course Code: %d, Course Type: %s, Professor: %s, Professor Code: %d\n", courseName.c_str(), courseCode, courseType.c_str(), profName.c_str(), profCode1);
+            } else{
+                string profName1 = professors[profCode1]->getName();
+                string profName2 = professors[profCode2]->getName();
+                fprintf(out, "Course: %s, Course Code: %d, Course Type: %s, Professors: %s (%d), %s (%d)\n", courseName.c_str(), courseCode, courseType.c_str(), profName1.c_str(), profCode1, profName2.c_str(), profCode2);
+            }
+        }
 
-//         for(int j = 0; j < p->getCategory(); j++){
-//             graph[i + j] = row;
-//         }
-//     }
-// }
-
-// void printGraph(const vector<vector<int>>& graph, int NUM_PROFESSORS, int NUM_COURSES) {
-//     cout << "  ";
-//     for(int i = 0; i < NUM_COURSES * 2; i++){
-//         printf("%3d", i + 1);
-//     }
-//     cout << endl;
-//     for(int i = 0; i < NUM_PROFESSORS * 3; i ++){
-//         printf("%2d| ", i);
-//         for(int j = 0; j < NUM_COURSES * 2; j++){
-//             cout << graph[i][j] << "  ";
-//         }
-//         cout << endl;
-//     }
-// }
-
+    }
+    fclose(out);
+}
 
 int main(){
 
@@ -275,18 +296,20 @@ int main(){
 
     graph->build(professors, profCodes);
     graph->print("original_graph.txt");
-    
+
     vector<vector<int>> rGraph = graph->getGraphCopy();
 
     // To test BFS
     // path 
+
     // vector<int> path;
-    // bfs(graph->getGraph(),graph->getS(),graph->getT(), path);
-//     for(int i = 0; i < path.size(); i++){
-//         cout << i <<":"<< path[i] << " ";
-//     }
-//     cout << endl;
+    // bfsWithCheckpoint(graph->getGraph(),graph->getS(),graph->getT(), 4, path);
+    // for(int i = 0; i < path.size(); i++){
+    //     cout << i <<":"<< path[i] << " ";
+    // }
+    // cout << endl;
 
     Graph* newGraph = fordFulkerson(graph->getGraph(), graph->getS(), graph->getT());
     newGraph->print("output.txt");
+    printAssignment("assignment.txt", newGraph, professors, courses);
 }

@@ -20,4 +20,8 @@ public:
     int getT();
     vector<vector<int>> getGraphCopy();
     void setGraph(vector<vector<int>> graph);
+    int getCourseCode(int index);
+    int getProfCode(int index);
 };
+
+int findInColumn(const vector<vector<int>>& matrix, int element, int column);
