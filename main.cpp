@@ -160,6 +160,66 @@ void printProfessors() {
     }
 }
 
+// bool bfs(Graph* graphObj, vector<int>& parent){
+//     vector<vector<int>> graph = graphObj->getGraph(); 
+//     int s = graphObj->getS();
+//     int n = graphObj->getN();
+//     parent = vector<int>(n, 0);
+//     vector<bool> visited(n, 0);
+//     queue<int> q;
+//     q.push(s);
+//     visited[s] = true;
+//     parent[s] = -1;
+    
+//     //bfs loop
+//     while(!q.empty()) {
+//         int u = q.front();
+//         q.pop();
+
+//         for(int v=0; v<n; v++){
+//             if(visited[v] == false && graph.get[u][v] > 0){
+//                 if(v==graph->getT()){
+//                     parent[v] = u;
+//                     return true; 
+//                 }
+//                 q.push(v);
+//                 parent[v] = u;
+//                 visited[v] = true;
+//             }
+//         }
+//     }
+// }
+
+bool bfs(vector<vector<int>>& graph, int s, int t,vector<int>& parent){
+    int n = graph.size();
+    parent = vector<int>(n, 0);
+    vector<bool> visited(n, 0);
+    
+    queue<int> q;
+    q.push(s);
+    visited[s] = true;
+    parent[s] = -1;
+    
+    //bfs loop
+    while(!q.empty()) {
+        int u = q.front();
+        q.pop();
+
+        for(int v=0; v<n; v++){
+            if(visited[v] == false && graph[u][v] > 0){
+                if(v==t){
+                    parent[v] = u;
+                    return true; 
+                }
+                q.push(v);
+                parent[v] = u;
+                visited[v] = true;
+            }
+        }
+    }
+    return false;
+}
+
 // void buildGraph(vector<vector<int>>& graph, map<int, Professor*> professors, map<int, Course*> courses, const int NUM_PROFESSORS, const int NUM_COURSES){
 //     for(int i = 0; i < NUM_PROFESSORS * 3; i += 3){
 //         // cout << "i: " << i << endl;
@@ -213,4 +273,16 @@ int main(){
 
     // buildGraph(graph, professors, courses, NUM_PROFESSORS, NUM_COURSES);
     // printGraph(graph, NUM_PROFESSORS, NUM_COURSES);
+    vector<vector<int>> rGraph = graph->getGraphCopy();
+    // path 
+    vector<int> parent;
+    bfs(graph->getGraph(),graph->getS(),graph->getT(), parent);
+
+    // To test bfs
+//     for(int i = 0; i < parent.size(); i++){
+//         cout << i <<":"<< parent[i] << " ";
+//     }
+//     cout << endl;
+
+
 }
