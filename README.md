@@ -1,3 +1,7 @@
+# Univesity Course Assignment System
+### <font size="20">A software that takes as input – a list of courses being offered that semester, a list of professors available on campus, and a list that matches the preferences of all profs to the different courses; and creates the best possible mapping such that professors of different categories get assigned courses that are only a part of their preference list and the maximum load assigned to the professor corresponds to their respective category.</font>
+
+
 ## Video Demo: (https://drive.google.com/file/d/13wXCM7oD0GZBnRFft6FncovhZySmBtBC/view?usp=sharing)
 
 ### Compile Command: g++ main.cpp graph.cpp Professor.cpp Course.cpp -o main
